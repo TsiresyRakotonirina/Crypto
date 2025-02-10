@@ -1,0 +1,44 @@
+services:
+  app:
+    image: crypto
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/crypto
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      SPRING_DATASOURCE_INITIALIZE: true
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SMTP_HOST : smtp.gmail.com
+      SMTP_PORT : 587
+      SMTP_USER : tsiresyrakotonirina02@gmail.com
+      SMTP_PASS: wysn kbsi igrs gpgr
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: crypto
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./database:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
+
+volumes:
+  postgres-data:
+
+networks:
+  app-network:
+    driver: bridge
+
+
